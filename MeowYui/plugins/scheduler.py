@@ -41,7 +41,7 @@ async def _hour_call_c():
             pass
 
 
-@nonebot.scheduler.scheduled_job('cron', minute='*')
+@nonebot.scheduler.scheduled_job('cron', hour='*')
 async def _hour_call_test():
     now = datetime.now(pytz.timezone('Asia/Shanghai'))
     try:
