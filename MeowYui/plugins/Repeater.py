@@ -6,6 +6,7 @@ PROB_A = 1.6
 group_stat = {}  # group_id: (last_msg, is_repeated, p)
 
 '''
+本功能摘抄自Hoshino-bot
 不复读率 随 复读次数 指数级衰减
 从第2条复读，即第3条重复消息开始有几率触发复读
 
