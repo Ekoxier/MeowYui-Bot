@@ -41,6 +41,17 @@ async def _hour_call_c():
             pass
 
 
+@nonebot.scheduler.scheduled_job('cron', hour='14', minute='45')
+async def _hour_call_d():
+    now = datetime.now(pytz.timezone('Asia/Shanghai'))
+    for i in group:
+        try:
+            await bot.send_group_msg(group_id=i,
+                                     message=f'[日常提醒]へんたいさん、准备好背刺了吗？')
+        except CQHttpError:
+            pass
+
+
 @nonebot.scheduler.scheduled_job('cron', hour='*')
 async def _hour_call_test():
     now = datetime.now(pytz.timezone('Asia/Shanghai'))
