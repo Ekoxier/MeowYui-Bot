@@ -93,6 +93,7 @@ def get_dynamic_content(dynamic_id):
     dynamic = dynamic.replace("\\\"", "\"")
     dynamic = dynamic.replace("\\/", "/")
     dynamic = dynamic.replace("null,", "None,")  # 由于返回数据中可能存在空值null，为了保持语义一致将其改为None
+    dynamic = dynamic.replace("https://", "")
     while re.search(r"(.*)(\"{)(.*)(\}\")(.*)", dynamic) is not None:
         dynamic = re.sub(r"(.*)(\"{)(.*)(\}\")(.*)", lambda x: x.group(1) + "{" + x.group(3) + "}" + x.group(5),
                          dynamic)
@@ -109,15 +110,14 @@ def get_dynamic_content(dynamic_id):
             html_content["data"]["card"]["desc"]["timestamp"])) + "\n" + \
             dynamic_dict["vest"]["content"] + "\n------------------------------------------------\n" + \
             dynamic_dict["sketch"]["title"] + "\n" + dynamic_dict["sketch"]["desc_text"] + "\n" + \
-            str(MessageSegment.image(cover_url)) + "\n" + "原文链接：https://t.bilibili.com/"
-        return fmt
+            str(MessageSegment.image(cover_url)) + "\n" + "原文链接：t.bilibili.com/"
     # 动态类型-原创
     elif dynamic_dict.get("origin") is None:
         # 无图
         if dynamic_dict["item"].get("content") is not None:
             fmt = dynamic_dict["user"]["uname"] + " " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(
                 html_content["data"]["card"]["desc"]["timestamp"])) + "\n" + \
-                dynamic_dict["item"]["content"] + "\n" + "原文链接：https://t.bilibili.com/"
+                dynamic_dict["item"]["content"] + "\n" + "原文链接：t.bilibili.com/"
         # 有图
         else:
             img_url = dynamic_dict["item"]["pictures"][0]["img_src"]
@@ -125,7 +125,7 @@ def get_dynamic_content(dynamic_id):
                 html_content["data"]["card"]["desc"]["timestamp"])) + "\n" + \
                 dynamic_dict["item"]["description"] + "\n" + str(MessageSegment.image(img_url)) + "\n" + \
                 "共" + str(dynamic_dict["item"]["pictures_count"]) + "张图片，详情点击下方链接" + "\n" + \
-                "原文链接：https://t.bilibili.com/"
+                "原文链接：t.bilibili.com/"
 
     else:
         # 动态类型 - 转发动态
@@ -137,14 +137,14 @@ def get_dynamic_content(dynamic_id):
                     html_content["data"]["card"]["desc"]["timestamp"])) + "\n" + \
                     dynamic_dict["item"]["content"] + "\n------------------------------------------------\n" + \
                     dynamic_dict["origin"]["user"]["name"] + "\n" + dynamic_dict["origin"]["item"]["description"] + "\n" + \
-                    str(MessageSegment.image(img_url)) + "\n" + "原文链接：https://t.bilibili.com/"
+                    str(MessageSegment.image(img_url)) + "\n" + "原文链接：t.bilibili.com/"
             # 无图
             else:
                 fmt = dynamic_dict["user"]["uname"] + " " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(
                     html_content["data"]["card"]["desc"]["timestamp"])) + "\n" + \
                     dynamic_dict["item"]["content"] + "\n------------------------------------------------\n" + \
                     dynamic_dict["origin"]["user"]["uname"] + "\n" + dynamic_dict["origin"]["item"]["content"] + "\n" +\
-                    "原文链接：https://t.bilibili.com/"
+                    "原文链接：t.bilibili.com/"
         # 动态类型-分享视频
         else:
             img_url = dynamic_dict["origin"]["pic"]
@@ -154,7 +154,8 @@ def get_dynamic_content(dynamic_id):
                 dynamic_dict["item"]["content"] + "\n------------------------------------------------\n" + \
                 dynamic_dict["origin_user"]["info"]["uname"] + "\n" + "视频投稿：" + dynamic_dict["origin"]["title"] + "\n" + \
                 "视频地址：" + video_url + "\n" +\
-                str(MessageSegment.image(img_url)) + "\n" + "原文链接：https://t.bilibili.com/"
+                str(MessageSegment.image(img_url)) + "\n" + "原文链接：t.bilibili.com/"
+    fmt = fmt.replace("[CQ:image,file=", "[CQ:image,file=https://")
     return fmt
 
 
