@@ -31,7 +31,7 @@ async def dynamic_forward():
 async def user_dynamic_test(session: CommandSession):
     dynamic_id_list = get_dynamic_ids(session.get('uid'))
     for i in range(0, 3):
-        msg = "【B站动态推送】\n" + get_dynamic_content(dynamic_id_list[i]) + dynamic_id_list[i]
+        msg = "【B站动态推送】\n" + get_dynamic_content(dynamic_id_list[i]) + str(dynamic_id_list[i])
         print(msg)
         await session.send(msg)
 
@@ -50,7 +50,7 @@ async def _(session: CommandSession):
 @on_command('动态', aliases='b站动态, B站动态')
 async def dynamic_test(session: CommandSession):
     dynamic_id = session.get('dynamic_id')
-    msg = "【B站动态推送】\n" + get_dynamic_content(dynamic_id) + dynamic_id
+    msg = "【B站动态推送】\n" + get_dynamic_content(dynamic_id) + str(dynamic_id)
     print(msg)
     await session.send(msg)
 
