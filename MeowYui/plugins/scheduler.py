@@ -3,8 +3,9 @@ from aiocqhttp.exceptions import Error as CQHttpError
 import nonebot
 import pytz
 
+from group_list import groups
 
-group = [319691773, 964997420]
+
 bot = nonebot.get_bot()
 
 
@@ -50,13 +51,3 @@ async def _hour_call_d():
                                      message=f'[日常提醒]へんたいさん、准备好背刺了吗？')
         except CQHttpError:
             pass
-
-
-@nonebot.scheduler.scheduled_job('cron', hour='*')
-async def _hour_call_test():
-    now = datetime.now(pytz.timezone('Asia/Shanghai'))
-    try:
-        await bot.send_group_msg(group_id=319691773,
-                                 message=f'[测试]现在是{now}。')
-    except CQHttpError:
-        pass

@@ -5,17 +5,57 @@ import json
 import re
 import time
 from aiocqhttp import MessageSegment
+from aiocqhttp.exceptions import Error as CQHttpError
+import nonebot
+from group_list import groups
+
+
+@nonebot.scheduler.scheduled_job('cron', minute='*')
+async def dynamic_forward():
+    for x in range(0, len(uids)):
+        current_list = get_dynamic_ids(uids[x])
+        for y in range(0, len(current_list)):
+            if latest_dynamic_of_uids[x] == current_list[y]:
+                latest_dynamic_of_uids[x] = current_list[0]
+                for z in range(0, y):
+                    for j in groups:
+                        try:
+                            await bot.send_group_msg(group_id=j,
+                                                     message="【B站动态推送】\n" + get_dynamic_content(current_list[z]) + str(current_list[z]))
+                        except CQHttpError:
+                            pass
+                break
+
+
+@on_command('动态获取测试')
+async def user_dynamic_test(session: CommandSession):
+    dynamic_id_list = get_dynamic_ids(session.get('uid'))
+    for i in range(0, 3):
+        msg = "【B站动态推送】\n" + get_dynamic_content(dynamic_id_list[i]) + dynamic_id_list[i]
+        print(msg)
+        await session.send(msg)
+
+
+@user_dynamic_test.args_parser
+async def _(session: CommandSession):
+    # 去掉消息首尾的空白符
+    stripped_arg = session.current_arg_text.strip()
+
+    if session.is_first_run:
+        if stripped_arg:
+            session.state['uid'] = stripped_arg
+        return
 
 
 @on_command('动态', aliases='b站动态, B站动态')
-async def dynamic_forward(session: CommandSession):
+async def dynamic_test(session: CommandSession):
     dynamic_id = session.get('dynamic_id')
     msg = "【B站动态推送】\n" + get_dynamic_content(dynamic_id) + dynamic_id
     print(msg)
     await session.send(msg)
 
 
-@dynamic_forward.args_parser
+@dynamic_test.args_parser
 async def _(session: CommandSession):
     # 去掉消息首尾的空白符
     stripped_arg = session.current_arg_text.strip()
@@ -25,14 +65,17 @@ async def _(session: CommandSession):
             session.state['dynamic_id'] = stripped_arg
         return
 
-def get_dynamic_ids():
-    url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=10330740"
+
+def get_dynamic_ids(uid):
+    url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=" + str(uid)
     html = requests.get(url)
     desc_lists = html.json()['data']['cards']
     arr = []
-    for list in desc_lists:
-        arr.append(list['desc']['dynamic_id'])
+    for dynamic in desc_lists:
+        arr.append(dynamic['desc']['dynamic_id'])
+    print(arr)
     return arr
+
 
 def get_dynamic_content(dynamic_id):
     # 获取动态内容
@@ -40,7 +83,7 @@ def get_dynamic_content(dynamic_id):
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                       'Chrome/83.0.4103.97 Safari/537.36'
     }
-    url = 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/get_dynamic_detail?dynamic_id=' + dynamic_id
+    url = 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/get_dynamic_detail?dynamic_id=' + str(dynamic_id)
     html = requests.get(url, headers=headers)
     html_content = ast.literal_eval(html.text)
 
@@ -113,3 +156,10 @@ def get_dynamic_content(dynamic_id):
                 "视频地址：" + video_url + "\n" +\
                 MessageSegment.image(img_url) + "\n" + "原文链接：https://t.bilibili.com/"
     return fmt
+
+
+uids = [507538, 49458759, 353840826]
+bot = nonebot.get_bot()
+latest_dynamic_of_uids = []
+for i in uids:
+    latest_dynamic_of_uids.append(get_dynamic_ids(i)[0])
