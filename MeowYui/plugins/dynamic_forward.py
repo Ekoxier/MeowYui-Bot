@@ -109,7 +109,7 @@ def get_dynamic_content(dynamic_id):
             html_content["data"]["card"]["desc"]["timestamp"])) + "\n" + \
             dynamic_dict["vest"]["content"] + "\n------------------------------------------------\n" + \
             dynamic_dict["sketch"]["title"] + "\n" + dynamic_dict["sketch"]["desc_text"] + "\n" + \
-            MessageSegment.image(cover_url) + "\n" + "原文链接：https://t.bilibili.com/"
+            str(MessageSegment.image(cover_url)) + "\n" + "原文链接：https://t.bilibili.com/"
         return fmt
     # 动态类型-原创
     elif dynamic_dict.get("origin") is None:
@@ -123,7 +123,7 @@ def get_dynamic_content(dynamic_id):
             img_url = dynamic_dict["item"]["pictures"][0]["img_src"]
             fmt = dynamic_dict["user"]["name"] + " " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(
                 html_content["data"]["card"]["desc"]["timestamp"])) + "\n" + \
-                dynamic_dict["item"]["description"] + "\n" + MessageSegment.image(img_url) + "\n" + \
+                dynamic_dict["item"]["description"] + "\n" + str(MessageSegment.image(img_url)) + "\n" + \
                 "共" + str(dynamic_dict["item"]["pictures_count"]) + "张图片，详情点击下方链接" + "\n" + \
                 "原文链接：https://t.bilibili.com/"
 
@@ -137,7 +137,7 @@ def get_dynamic_content(dynamic_id):
                     html_content["data"]["card"]["desc"]["timestamp"])) + "\n" + \
                     dynamic_dict["item"]["content"] + "\n------------------------------------------------\n" + \
                     dynamic_dict["origin"]["user"]["name"] + "\n" + dynamic_dict["origin"]["item"]["description"] + "\n" + \
-                    MessageSegment.image(img_url) + "\n" + "原文链接：https://t.bilibili.com/"
+                    str(MessageSegment.image(img_url)) + "\n" + "原文链接：https://t.bilibili.com/"
             # 无图
             else:
                 fmt = dynamic_dict["user"]["uname"] + " " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(
@@ -154,7 +154,7 @@ def get_dynamic_content(dynamic_id):
                 dynamic_dict["item"]["content"] + "\n------------------------------------------------\n" + \
                 dynamic_dict["origin_user"]["info"]["uname"] + "\n" + "视频投稿：" + dynamic_dict["origin"]["title"] + "\n" + \
                 "视频地址：" + video_url + "\n" +\
-                MessageSegment.image(img_url) + "\n" + "原文链接：https://t.bilibili.com/"
+                str(MessageSegment.image(img_url)) + "\n" + "原文链接：https://t.bilibili.com/"
     return fmt
 
 
