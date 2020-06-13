@@ -25,6 +25,14 @@ async def _(session: CommandSession):
             session.state['dynamic_id'] = stripped_arg
         return
 
+def get_dynamic_ids():
+    url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid=10330740"
+    html = requests.get(url)
+    desc_lists = html.json()['data']['cards']
+    arr = []
+    for list in desc_lists:
+        arr.append(list['desc']['dynamic_id'])
+    return arr
 
 def get_dynamic_content(dynamic_id):
     # 获取动态内容
