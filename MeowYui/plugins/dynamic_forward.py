@@ -73,7 +73,7 @@ def get_dynamic_ids(uid):
     arr = []
     for dynamic in desc_lists:
         arr.append(dynamic['desc']['dynamic_id'])
-    print(arr)
+    print(arr[0:5])
     return arr
 
 
