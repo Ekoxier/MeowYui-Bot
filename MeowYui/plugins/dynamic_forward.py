@@ -204,7 +204,8 @@ def get_dynamic_content(dynamic_id):
     return fmt
 
 
-uids = [507538, 49458759, 353840826]
+uids = [49458759, 353840826, 46501987, 14454663, 9135820, 13504140]
+#uid_names = ["乐爷Official", "公主连结ReDive", "喵星瑞依Rayee", "席巴鸽", "盐取shiotori", "1s-rock"]
 bot = nonebot.get_bot()
 latest_dynamic_of_uids = []
 for user_uid in uids:
