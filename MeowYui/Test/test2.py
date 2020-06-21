@@ -1,10 +1,22 @@
-import requests
-from bs4 import BeautifulSoup
-import ast
-import json
-import re
-import time
-#
-# str="bilibili://video/583490570/?page=1&player_preload=null&player_width=1920&player_height=1080&player_rotate=0"
-# video_url = "https://www.bilibili.com/video/" + re.search(r"(bilibili://video/)(\d+)(/*)", str).group(2)
-# print(video_url)
+import datetime
+import pytz
+
+'''
+# 时间测试
+now = datetime.datetime.now(pytz.timezone('Asia/Shanghai'))
+now = now - datetime.timedelta(days=21)
+print(now)
+print(now.year)
+print(now.month)
+print(now.day)
+'''
+
+uids = {9458759: "乐爷Official",
+        353840826: "公主连结ReDive",
+        14454663: "席巴鸽",
+        9135820: "盐取shiotori",
+        13504140: "1s-rock",
+        865683: "待宵姫Channel"}
+
+for x in uids:
+    print(x)
