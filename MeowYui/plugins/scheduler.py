@@ -20,8 +20,19 @@ async def _hour_call_a():
             pass
 
 
-@nonebot.scheduler.scheduled_job('cron', hour='5')
+@nonebot.scheduler.scheduled_job('cron', hour='5, 11, 17, 23', minute='55')
 async def _hour_call_b():
+    now = datetime.now(pytz.timezone('Asia/Shanghai'))
+    for i in groups:
+        try:
+            await bot.send_group_msg(group_id=i,
+                                     message=f'[日常提醒]还有五分钟商店就要刷新了，不要忘了买经验药剂哦！')
+        except CQHttpError:
+            pass
+
+
+@nonebot.scheduler.scheduled_job('cron', hour='5')
+async def _hour_call_c():
     now = datetime.now(pytz.timezone('Asia/Shanghai'))
     for i in groups:
         try:
@@ -32,7 +43,7 @@ async def _hour_call_b():
 
 
 @nonebot.scheduler.scheduled_job('cron', hour='14', minute='45')
-async def _hour_call_c():
+async def _hour_call_d():
     now = datetime.now(pytz.timezone('Asia/Shanghai'))
     for i in groups:
         try:

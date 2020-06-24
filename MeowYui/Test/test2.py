@@ -1,5 +1,6 @@
 import datetime
 import pytz
+import this
 
 '''
 # 时间测试
@@ -11,6 +12,7 @@ print(now.month)
 print(now.day)
 '''
 
+'''
 uids = {9458759: "乐爷Official",
         353840826: "公主连结ReDive",
         14454663: "席巴鸽",
@@ -20,3 +22,4 @@ uids = {9458759: "乐爷Official",
 
 for x in uids:
     print(x)
+'''
